@@ -1,0 +1,75 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+    template="/template/layout.xhtml">
+    
+    <ui:define name="conteudo">
+    	<style>
+    		.ui-datepicker-trigger {
+    			padding-left: 7px;
+    		}
+    		
+    	</style>
+    
+    	<ui:include src="cadastro_movimentacao.xhtml">
+    		<ui:param name="baseController" value="#{movimentacaoController}" />
+    	</ui:include>
+    	
+    	<br></br>
+    	
+    	<h:form id="formMov">
+	    	
+	    	<p:dataTable id="dataTableMov" emptyMessage="#{msg['busca.vazia']}" 
+	    					var="mov" value="#{movimentacaoController.listaMovimentacoes}">
+	    		
+	    		<f:facet name="header">  
+            		<h:outputText value="#{msg['mensagem.movimentacoes.ultimos.30.dias']}"/>
+        		</f:facet>  			
+	    		
+				<p:column>  
+		            <f:facet name="header" style="text-align: center">  
+		           		<h:outputText value="#{msg['label.data.pagamento']}"/>
+		            </f:facet>  
+		            <h:outputText value="#{mov.dataPagamento}">
+		            	<f:convertDateTime pattern="dd/MM/yyyy"/>
+		            </h:outputText>  
+		        </p:column>  
+		  
+		        <p:column>  
+		            <f:facet name="header">  
+		           		<h:outputText value="#{msg['label.descricao']}"/>
+		            </f:facet>  
+		           <h:outputText value="#{mov.descricao}" />
+		        </p:column>  
+		  
+		        <p:column style="text-align: center">  
+		            <f:facet name="header">  
+		           		<h:outputText value="#{msg['label.valor.pagamento']}"/>
+		            </f:facet>  
+		            <h:outputText value="#{mov.valorPagamento}" style="#{movimentacaoController.verificarDebito(mov) ? 'color: red' : ''}" >
+		            	<f:convertNumber maxFractionDigits="2" type="currency" />
+		            </h:outputText> 
+		            
+		            <f:facet name="footer">  
+						<h:outputText value="#{movimentacaoController.saldoDisponivel.valorPagamento}">
+			            	<f:convertNumber maxFractionDigits="2" type="currency" />
+			            </h:outputText>             		
+			        </f:facet> 
+		        </p:column>  
+		  
+		        <p:column style="text-align: center">  
+		            <f:facet name="header">  
+		           		<h:outputText value="#{msg['label.tipo.movimentacao']}"/>
+		            </f:facet>  
+		            <h:outputText value="#{mov.tipoMovimentacao}"/> 
+		        </p:column>  
+	    	</p:dataTable>
+		</h:form>
+		
+    </ui:define>
+    
+</ui:composition>

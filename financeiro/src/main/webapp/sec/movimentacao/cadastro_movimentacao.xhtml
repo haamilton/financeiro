@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+		
+		<h:form id="formCadMov">
+		
+	    	<p:panel id="painelCadastro" header="#{msg['label.cadastro.movimentacao']}">
+	    		
+	    		<h:panelGrid columns="8" style="width:100%">
+	    			<h:outputText value="#{msg['label.data.pagamento']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<p:calendar
+		    					pattern="dd/MM/yyyy"
+	    						size="8" 
+		    					value="#{baseController.movimentacao.dataPagamento}"
+		    					showOn="button" 
+	    						popupIconOnly="true"
+	    						readOnlyInputText="true"
+	    						/>
+					</h:panelGroup>
+					
+					<h:outputText value="#{msg['label.valor.pagamento']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<p:inputText 	id="valorPagamento"
+		    							converter="br.com.hsj.converter.BigDecimalConverter"
+		    							style="width: 70px"
+		    							maxlength="9"
+		    							styleClass="maskDinheiro"
+		    							value="#{baseController.movimentacao.valorPagamento}" 
+		    							size="15" />
+						<script>$(".maskDinheiro").maskMoney({decimal:",", thousands:".", allowZero:true});</script>
+					</h:panelGroup> 
+					
+					<h:outputText value="#{msg['label.descricao']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:inputText 
+										value="#{baseController.movimentacao.descricao}"
+										maxlength="255" 
+										size="40" />
+					</h:panelGroup>    		
+
+					
+					<h:outputText value="#{msg['label.tipo.movimentacao']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:selectOneMenu  value="#{baseController.movimentacao.tipoMovimentacao}" 
+											converter="br.com.hsj.converter.GenericEnumConverter">
+							<f:selectItems value="#{baseController.itens}" />
+						</p:selectOneMenu>
+					</h:panelGroup>   
+					
+					<h:outputText value="#{msg['label.categoria']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:selectOneMenu  value="#{baseController.movimentacao.categoria.id}" 
+											converter="javax.faces.Long">
+							<f:selectItems value="#{baseController.itensCategorias}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+
+					<h:outputText value="#{msg['label.centro.custo']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:selectOneMenu  value="#{baseController.movimentacao.centroCusto.id}" 
+											converter="javax.faces.Long">
+							<f:selectItems value="#{baseController.itensCentroCusto}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+					
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+					
+	    		</h:panelGrid>
+	    		
+	    		
+	    		<p:accordionPanel>
+	    			<p:tab title="#{msg['label.despesa']}" >
+	    				<h:panelGrid rendered="#{baseController.movimentacao.despesa ne null}">
+	    					
+	    					<h:outputText value="#{baseController.movimentacao.despesa.descricao}" />
+	    					
+	    				</h:panelGrid>
+	    				
+						<p:commandButton value="#{msg['botao.buscar']}"
+									action="#{baseController.limparPopUpDespesa}"
+									icon="ui-icon-search"
+									oncomplete="modalDespesa.show();"
+									update=":modalDespesaId"
+									immediate="true"/>
+						
+					</p:tab>
+	    		</p:accordionPanel>
+	    		
+	    		
+	    		<h:panelGrid columns="1" style="width:100%; text-align: right">
+	    			<p:commandButton value="#{msg['botao.salvar']}" 
+	   							action="#{baseController.salvar}" 
+	   							update=":formMov:dataTableMov, painelCadastro" />
+	   							
+	    		</h:panelGrid>
+	    		
+	    	</p:panel>
+	    	
+	    </h:form>
+	    
+	    <ui:include src="/sec/despesa/popUpDespesa.xhtml">
+	    	<ui:param name="baseController" value="#{baseController}" />
+	    </ui:include>
+
+</ui:composition>

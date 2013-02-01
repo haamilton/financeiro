@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+						http://www.springframework.org/schema/jee 
+           				http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+						http://www.springframework.org/schema/security
+          				http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="br.com.hsj.financeiro" />
+
+	<context:property-placeholder location="classpath:database.properties" />
+
+<!-- 	<jee:jndi-lookup id="dataSource" jndi-name="/jdbc/financeiroDS" resource-ref="true" /> 
+		
+		Configurações tomcat:
+		
+		<Context docBase="financeiro" path="/financeiro" reloadable="true" source="org.eclipse.jst.jee.server:financeiro">
+      		<Resource name="jdbc/financeiroDS" auth="Container"
+					type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+					url="jdbc:postgresql://localhost:5432/financeiro"
+					username="postgres" password="Intern@cional8" maxActive="20" maxIdle="10"
+					maxWait="-1"/>
+      	</Context>
+-->
+
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	  <property name="driverClassName" value="${database.driver}" />
+	  <property name="url" value="${database.url}" />
+	  <property name="username" value="${database.username}" />
+	  <property name="password" value="${database.password}" />
+	  <property name="maxActive" value="${database.maxActive}"/>
+	  <property name="maxIdle" value="${database.maxIdle}"/>
+	  <property name="maxWait" value="${database.maxWait}"/>
+	</bean>
+
+	<!-- Propriedades do hibernate -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="br.com.hsj.financeiro.entidade" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.c3p0.min_size">5</prop>
+				<prop key="hibernate.c3p0.max_size">20</prop>
+				<prop key="hibernate.c3p0.timeout">300</prop>
+				<prop key="hibernate.c3p0.max_statements">50</prop>
+				<prop key="hibernate.c3p0.idle_test_period">3000</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<bean id="arquivoMensagens"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>messages</value>
+		</property>
+	</bean>
+	
+	
+	<!-- Spring security -->
+	
+	<sec:http auto-config="true" access-denied-page="/acessonegado.xhtml">
+
+		<sec:intercept-url pattern="/login.xhtml" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/home.xhtml" access="ROLE_USER, ROLE_ADM" />
+		<sec:intercept-url pattern="/resources/**" access="ROLE_USER, ROLE_ADM" />
+		<sec:intercept-url pattern="/javax.faces.resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/template/**" access="ROLE_USER, ROLE_ADM" />
+		<sec:intercept-url pattern="/sec/**" access="ROLE_USER, ROLE_ADM" />
+
+		<sec:form-login login-page="/login.xhtml"
+			login-processing-url="/j_spring_security_check"
+			default-target-url="/home.xhtml" 
+			authentication-failure-url="/login.xhtml" />
+
+		<sec:logout logout-success-url="/login.xhtml" />
+
+	</sec:http>
+
+	<sec:authentication-manager>
+		<sec:authentication-provider user-service-ref="usuarioServico" ref="daoAuthenticationProvider">
+			<sec:password-encoder hash="md5" />
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="usuarioServico" />
+	</bean>
+	
+<!-- 	<bean id="loggerListener" class="org.springframework.security.access.event.LoggerListener" /> -->
+
+</beans>

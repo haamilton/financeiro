@@ -1,0 +1,200 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+    template="/template/layout.xhtml">
+    
+    <ui:define name="conteudo">
+
+		<h:form id="form">
+	    	
+	    	<p style="margin: 0; padding: 0;"><b><h:outputText value="#{msg['menu.despesas']}" /></b></p>
+	    	<p:separator />    
+
+    		<p:spacer height="10" />
+    		
+   			<div style="width: 100%">
+   			
+	   			<p:commandButton value="#{msg['botao.salvar']}" 
+	   							action="#{centroCustoController.salvar}" 
+	   							update=":form:panel" />
+	
+	   			<p:commandButton value="#{msg['botao.limpar']}" 
+	   							action="#{centroCustoController.limpar}" 
+	   							update=":form:panel" />
+			
+			</div>
+
+			<p:spacer height="10" />
+    		
+    		<p:panel id="panel">
+			
+				<h:panelGrid columns="2">
+
+					<h:outputText value="#{msg['label.descricao']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+	    				<p:inputText 	id="descricao"
+		    							maxlength="60"
+		    							value="#{despesaController.despesa.descricao}" 
+		    							size="60" />
+					</h:panelGroup> 
+
+					<h:outputText value="#{msg['label.tipo.despesa']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+	    				<p:selectOneMenu  value="#{despesaController.despesa.tipoDespesa}" 
+											converter="br.com.hsj.converter.GenericEnumConverter">
+							<f:selectItems value="#{despesaController.itens}" />
+							<p:ajax event="change" listener="#{despesaController.habilitarCamposParcelas}" update=":form:panel" />
+						</p:selectOneMenu>
+					</h:panelGroup> 
+
+					<h:outputText value="#{msg['label.valor.pagamento']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<p:inputText 	id="valorPagamento"
+		    							converter="br.com.hsj.converter.BigDecimalConverter"
+		    							style="width: 70px"
+		    							maxlength="9"
+		    							styleClass="maskDinheiro"
+		    							value="#{despesaController.despesa.valor}" 
+		    							size="15" />
+						<script>$(".maskDinheiro").maskMoney({decimal:",", thousands:".", allowZero:true});</script>
+					</h:panelGroup>
+
+					<h:outputText value="#{msg['label.data.vencimento']}:" styleClass="campo_obrigatorio" rendered="#{not despesaController.apresentarComboParcelas}"/>
+	    			<h:panelGroup rendered="#{not despesaController.apresentarComboParcelas}">
+		    			<p:calendar
+		    					pattern="dd/MM/yyyy"
+	    						size="8" 
+		    					value="#{despesaController.despesa.dataVencimento}"
+		    					showOn="button" 
+	    						popupIconOnly="true"
+	    						readOnlyInputText="true"
+	    						/>
+					</h:panelGroup>
+
+					<h:outputText value="#{msg['label.qtde.parcelas']}:" styleClass="campo_obrigatorio" rendered="#{despesaController.apresentarComboParcelas}"/>
+	    			<h:panelGroup rendered="#{despesaController.apresentarComboParcelas}">
+	    				<p:inputText value="#{despesaController.despesa.qtdeParcelas}" maxlength="4" converter="javax.faces.Integer"  />
+	    				<p:commandButton value="#{msg['botao.gerar.parcelas']}" 
+	   							action="#{despesaController.gerarParcelas}" 
+	   							update=":form:panelParcelas" />
+					</h:panelGroup> 
+					
+				</h:panelGrid>
+				
+				<p:spacer height="10" />
+				
+				<h:panelGroup id="panelParcelas">
+					
+					<p:dataTable id="dataTableMov" emptyMessage="#{msg['busca.vazia']}" 
+	    					var="desp" value="#{despesaController.despesa.parcelas}" rendered="#{despesaController.apresentarComboParcelas}">
+	    		
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.numero']}"/>
+				            </f:facet>  
+				            <h:outputText value="#{desp.descricao}" />
+				        </p:column>
+
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.numero']}"/>
+				            </f:facet>  
+				            <h:outputText value="#{desp.numeroParcela}" />
+				        </p:column>
+
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.data.vencimento']}"/>
+				            </f:facet>  
+				            <p:calendar
+		    					pattern="dd/MM/yyyy"
+	    						size="8" 
+		    					value="#{desp.dataVencimento}"
+		    					showOn="button" 
+	    						popupIconOnly="true"
+	    						readOnlyInputText="true"
+	    						rendered="#{despesaController.apresentarComboParcelas}"
+	    						/>
+				        </p:column>
+
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.valor.pagamento']}"/>
+				            </f:facet>  
+				            <p:inputText 
+		    							converter="br.com.hsj.converter.BigDecimalConverter"
+		    							style="width: 70px"
+		    							maxlength="9"
+		    							styleClass="maskDinheiro"
+		    							value="#{desp.valor}" 
+		    							size="15">
+		    					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+		    				</p:inputText>
+						<script>$(".maskDinheiro").maskMoney({decimal:",", thousands:".", allowZero:true});</script>
+				        </p:column>
+				        
+				        <p:column>  
+				            <f:facet name="header" style="text-align: center">  
+				           		<p:spacer height="1" />
+				            </f:facet>  
+				            <p:spacer height="1" />
+				        </p:column>
+        				
+        			</p:dataTable>  			
+					
+				</h:panelGroup>
+			</p:panel>
+    
+        	<p:spacer height="10" />
+    		
+   			<div style="width: 100%">
+   			
+	   			<p:commandButton value="#{msg['botao.salvar']}" 
+	   							action="#{despesaController.salvar}" 
+	   							update=":form:panel" />
+	
+	   			<p:commandButton value="#{msg['botao.limpar']}" 
+	   							action="#{despesaController.limpar}" 
+	   							update=":form:panel" />
+			
+			</div>
+
+			<p:spacer height="10" />
+			
+
+	   		<p:treeTable id="dataTableDesp" value="#{despesaController.root}" var="node">
+		
+		        <p:column>
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.descricao']}"/>
+		            </f:facet>
+		            <h:outputText value="#{node.descricao}" />
+		        </p:column>
+
+		        <p:column>
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.valor.pagamento']}"/>
+		            </f:facet>
+		            <h:outputText value="#{node.valor}" />
+		        </p:column>
+		
+		        <p:column style="text-align: center" >
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.acao']}"/>
+		            </f:facet>
+					<p:spacer width="2" />		            
+		        </p:column>
+		
+		    </p:treeTable>
+		</h:form>    
+    
+    </ui:define>
+    
+</ui:composition>
+    
+    
+    

@@ -1,0 +1,92 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+    template="/template/layout.xhtml">
+    
+    <ui:define name="conteudo">
+
+		<h:form id="formCat">
+	    	
+	    	<p style="margin: 0; padding: 0;"><b><h:outputText value="#{msg['menu.centro.custo']}" /></b></p>
+	    	<p:separator />    
+	    	
+	    	<p:spacer height="10" />
+    		
+    		<p:panel id="panelCadastroCentroCusto">
+    			
+    			<p:spacer height="10" />
+    			
+				<h:panelGrid columns="2">
+				
+	    			<h:outputText value="#{msg['label.centro.custo']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<p:inputText 	id="categoria"
+		    							maxlength="60"
+		    							value="#{centroCustoController.descricao}" 
+		    							size="60" />
+					</h:panelGroup>
+
+					<h:outputText value="#{msg['label.tipo.centro.custo']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:selectOneMenu  value="#{centroCustoController.tipoPesquisa}" 
+											converter="br.com.hsj.converter.GenericEnumConverter">
+							<f:selectItems value="#{centroCustoController.itens}" />
+						</p:selectOneMenu>
+					</h:panelGroup>   
+
+    			</h:panelGrid>
+    			
+    			<p:spacer height="10" />
+
+    		</p:panel>
+
+   			<p:spacer height="10" />
+   			
+   			<div style="width: 100%">
+   			
+   			<p:commandButton value="#{msg['botao.salvar']}" 
+   							action="#{centroCustoController.salvar}" 
+   							update=":formCat:dataTableCC" />
+
+   			<p:commandButton value="#{msg['botao.limpar']}" 
+   							action="#{centroCustoController.limpar}" 
+   							update=":formCat:panelCadastroCentroCusto" />
+			
+			</div>
+						
+   			<p:spacer height="10" />
+   			
+   			<p:dataTable id="dataTableCC" emptyMessage="#{msg['busca.vazia']}" 
+	    					var="centro" value="#{centroCustoController.listaCentroCusto}">
+	    					
+				<p:column>  
+		            <f:facet name="header">  
+		           		<h:outputText value="#{msg['label.centro.custo']}"/>
+		            </f:facet>  
+		            <h:outputText value="#{centro.descricao}" />
+		        </p:column>  	    					
+
+				<p:column>  
+		            <f:facet name="header">  
+		           		<h:outputText value="#{msg['label.tipo.centro.custo']}"/>
+		            </f:facet>  
+		            <h:outputText value="#{centro.tipoCentroCusto.descricao}" />
+		        </p:column> 
+		        
+		        <p:column>
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.acao']}"/>
+		            </f:facet>
+		            <p:spacer width="2" />
+		        </p:column> 	    					
+	    	</p:dataTable>
+   
+    	</h:form>
+    	
+    </ui:define>
+    
+</ui:composition>

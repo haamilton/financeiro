@@ -1,0 +1,32 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+					<h:form>
+						<p:menubar autoSubmenuDisplay="true">  
+					        <p:submenu label="#{msg['menu.cadastro']}">  
+					            <p:menuitem value="#{msg['menu.categoria']}" 
+				            			url="/sec/categoria/categorias.xhtml"/>
+					            <p:menuitem value="#{msg['menu.centro.custo']}" 
+				            			url="/sec/centrocusto/centroscusto.xhtml"/>
+					            <p:menuitem value="#{msg['menu.despesas']}" 
+				            			url="/sec/despesa/despesas.xhtml"/>
+					        </p:submenu>  
+					        <p:submenu label="#{msg['menu.movimentacao']}">  
+					            <p:menuitem value="#{msg['menu.ultimos.30dias']}" 
+				            			url="/sec/movimentacao/movimentacoes.xhtml"/>
+					            <p:menuitem value="#{msg['menu.movimentacao.por.data']}" 
+				            			url="/sec/movimentacao/mov_por_data.xhtml"/>
+					        </p:submenu>
+					        
+					        <p:menuitem value="#{msg['label.sair']}" 
+				            			action="#{loginController.logout}"
+				            			ajax="false" />
+					    </p:menubar>
+					</h:form>
+    
+</ui:composition>

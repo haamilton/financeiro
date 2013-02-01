@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+	
+	<title><h:outputText value="#{msg.titulo}" /></title>
+	
+	<ui:insert name="head" />
+	
+	<h:outputScript name="jquery.maskMoney.js" library="js"></h:outputScript>
+
+</h:head>
+<h:body>
+
+	<p:growl id="messages" autoUpdate="true" showDetail="true" life="5000" />
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+			
+	<p:dialog modal="true" widgetVar="statusDialog"
+	        draggable="false" closable="false" width="100" height="100">
+		<h:graphicImage library="images" name="loading.gif" style="border: 0" />
+	</p:dialog>
+
+	<div class="main">
+		<div class="header">
+			<h:form>
+				<div class="header_resize">
+					<div class="logo">
+						<h:commandLink action="/sec/index.xhtml">
+							<h:graphicImage library="images" name="logo.png" style="border: 0" />
+						</h:commandLink>
+					</div>
+					<div class="titulo_header">
+						<p><h:outputText value="#{msg['titulo']}" /></p>
+					</div>
+					<div class="menu_nav">
+						<h1 style="width: 100%;" align="right">
+							<small style="width: 100%;" ><h:outputText value="#{usuarioController.usuarioLogado.nome}" /></small>
+						</h1>
+					</div>
+					<div class="clr"></div>
+				</div>
+			</h:form>
+		</div>
+		
+		<div class="content">
+			<div class="content_resize">
+				<div class="header_menu">
+					<ui:include src="menu.xhtml" />
+				</div>
+				<div class="conteudo">
+					<ui:insert name="conteudo" />
+				</div>
+				<div class="clr"></div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="center">
+				<p><h:outputText value="#{msg['label.desenvolvido']}" /></p>
+			</div>
+			<div class="clr"></div>
+		</div>
+	</div>
+</h:body>
+</html>

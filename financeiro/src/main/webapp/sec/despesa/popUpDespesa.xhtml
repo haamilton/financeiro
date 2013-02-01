@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	    <p:dialog id="modalDespesaId" widgetVar="modalDespesa" resizable="false" header="#{msg['label.busca.despesa']}"  modal="true" closable="true"
+    				width="650" height="350">
+		    <h:form id="formModalDespesa">
+    		
+    			<p:panel id="painelBusca" header="#{msg['label.filtro']}">
+    				<p:commandButton action="#{baseController.buscarDespesas}" value="#{msg['botao.buscar']}" 
+    						update=":formModalDespesa:dataTableDespesas" />
+    			</p:panel>
+    			
+    			<p:spacer height="10" />
+    			
+    			<p:dataTable id="dataTableDespesas" emptyMessage="#{msg['busca.vazia']}" 
+	    					var="desp" value="#{baseController.listaDespesas}">
+	    		
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.numero']}"/>
+				            </f:facet>  
+				            <h:outputText value="#{desp.descricao}" />
+				        </p:column>
+
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.data.vencimento']}"/>
+				            </f:facet> 
+				            <h:outputText value="#{desp.dataVencimento}">
+				            	<f:convertDateTime pattern="dd/MM/yyyy" />
+				            </h:outputText> 
+				        </p:column>
+
+        				<p:column style="text-align: center">  
+				            <f:facet name="header">  
+				           		<h:outputText value="#{msg['label.valor.pagamento']}"/>
+				            </f:facet>  
+				            <h:outputText  
+		    							converter="br.com.hsj.converter.BigDecimalConverter"
+		    							value="#{desp.valor}">
+		    					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+		    				</h:outputText>
+				        </p:column>
+				        
+				        <p:column style="text-align:center">  
+				            <f:facet name="header" style="text-align: center">  
+				           		<h:outputText value="#{msg['label.selecionar']}" />
+				            </f:facet>  
+				            <p:commandButton icon="ui-icon-arrowreturnthick-1-s"
+				            	action="#{baseController.selecionarDespesa(desp)}"
+				            	oncomplete="modalDespesa.hide()"
+				            	update=":formCadMov:painelCadastro, :modalDespesaId">
+				            </p:commandButton>
+				        </p:column>
+        				
+        			</p:dataTable> 
+    			
+		    </h:form>
+    		
+    	</p:dialog>
+
+</ui:composition>

@@ -1,0 +1,133 @@
+body { 
+	margin:0; 
+	padding:0; 
+	width:100%; 
+	color:#9a9a9a; 
+	font:normal 12px/1.8em Arial, Helvetica, sans-serif;
+	font-size: 80%;
+}
+
+html, .main { 
+	padding:0; 
+	margin:0; 
+	background: #ececec;
+}
+
+.clr { 
+	clear:both; 
+	padding:0; 
+	margin:0; 
+	width:100%; 
+	font-size:0px; 
+	line-height:0px;
+}
+
+.header { 
+	margin:0; 
+	padding:0;
+	background: #1E557A; 
+}
+
+.header_resize { 
+	 margin:0 auto; 
+	 padding:3px 0 0 0; 
+	 width:970px;
+}
+
+.logo { 
+	padding:0; 
+	margin:0 auto; 
+	width:50px; 
+	float:left;
+}
+
+.titulo_header { 
+	padding-top:15px; 
+	padding-left: 10px;
+	width:400px; 
+	float:left;
+}
+
+.titulo_header p { 
+	color:#78bbe6;
+	font:normal 20px/1.2em Arial, Helvetica, sans-serif;
+}
+
+h1 { margin:0; padding:5px 0; width:340px; color:#fff; font:normal 36px/1.2em Arial, Helvetica, sans-serif; letter-spacing:-2px; }
+h1 a { color:#fff; text-decoration:none; float:left;}
+h1 a:hover { color:#78bbe6; text-decoration:none;}
+h1 a:hover span { color:#fff;}
+h1 span { color:#78bbe6; }
+h1 small {  color:#fff; float:left; padding:10px 0 0 0; font:normal 12px/1.2em Arial, Helvetica, sans-serif; letter-spacing:normal;}
+p { margin:8px 0; padding:0 0 8px 0; font:normal 12px/1.8em Arial, Helvetica, sans-serif;}
+p.spec { text-align:right;}
+
+.menu_nav { 
+	margin:30px 0 0 0; 
+	padding:3px 0 0 10px; 
+	float:right; 
+	width:500px;
+}
+
+.header_menu { 
+	width:970px;  
+	padding:0px 0 0 0;
+}
+
+.content { 
+	padding:0px 0 0 0;
+}
+
+.content_resize { 
+	margin:0 auto; 
+	padding:0px 0 0 0; 
+	width:970px; 
+}
+
+.footer { 
+	width:970px; 
+	margin:0 auto; 
+	padding:10px 0 10px 0;
+	background: #1E557A;
+}
+
+.footer p { 
+	margin:0; 
+	padding:4px 0; 
+	width:auto;
+	line-height:1.5em; 
+	color:#a5bbca;
+	font:normal 10px/1.8em Arial, Helvetica, sans-serif;
+}
+
+
+.center {
+	text-align: center;
+}
+
+.conteudo {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color:black;
+}
+
+.menu_esq { 
+	padding-top: 10px;
+	padding-bottom: 10px;	
+	float:left; 
+	width:170px;
+}
+
+.coluna_label_form {
+	text-align: right;
+}
+
+.ind_campo_obrigatorio {
+	color: red;	
+}
+
+.campo_obrigatorio {
+	font-weight: bold;	
+}
+
+.ui-widget {font-size: 11px !important;} 

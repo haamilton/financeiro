@@ -1,0 +1,161 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+    template="/template/layout.xhtml">
+    
+    <ui:define name="conteudo">
+
+		<h:form id="formCat">
+	    	
+	    	<p style="margin: 0; padding: 0;"><b><h:outputText value="#{msg['menu.categoria.subcategorias']}" /></b></p>
+	    	<p:separator />    
+    		
+    		<p:spacer height="10" />
+    		
+    		<p:panel id="panelCadastroCategoria">
+    			
+    			<p:spacer height="10" />
+    			
+				<h:panelGrid columns="2">
+				
+	    			<h:outputText value="#{msg['label.categoria']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<p:inputText 	id="categoria"
+		    							maxlength="60"
+		    							value="#{categoriaController.categoria.descricao}" 
+		    							size="60" />
+					</h:panelGroup>
+					
+					<h:outputText value="#{msg['label.tipo.movimentacao']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:selectOneMenu 	value="#{categoriaController.categoria.tipoMovimentacao}" 
+											converter="br.com.hsj.converter.GenericEnumConverter">
+							<f:selectItems value="#{categoriaController.itens}" />
+						</p:selectOneMenu>
+					</h:panelGroup>   
+					
+
+    			</h:panelGrid>
+				
+				<p:spacer height="10" />
+				
+    		</p:panel>
+   
+	    	<p:spacer height="10" />
+
+			<div style="width: 100%">
+
+				<p:commandButton value="#{msg['botao.salvar']}" 
+	   							action="#{categoriaController.salvar}" 
+	   							update=":formCat:dataTableCat, :formCat:panelCadastroCategoria" />
+	
+	   			<p:commandButton value="#{msg['botao.limpar']}" 
+	   							action="#{categoriaController.limpar}" 
+	   							update=":formCat:dataTableCat, :formCat:panelCadastroCategoria" />
+			
+			</div>
+			   							
+	    	<p:spacer height="10" />
+
+			<p:treeTable id="dataTableCat" value="#{categoriaController.root}" var="node">
+		
+		        <p:column>
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.descricao']}"/>
+		            </f:facet>
+		            <h:outputText value="#{node.categoria.descricao}" />
+		        </p:column>
+		
+		        <p:column style="text-align: center" >
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.tipo.movimentacao']}"/>
+		            </f:facet>
+		            <h:outputText value="#{node.categoria.tipoMovimentacao}"/>
+		        </p:column>
+		
+		        <p:column style="text-align: center" >
+		            <f:facet name="header">
+		                <h:outputText value="#{msg['label.acao']}"/>
+		            </f:facet>
+		            
+		            <p:commandLink 	update=":formCat:panelCadastroCategoria" 
+		            				action="#{categoriaController.editarCategoria(node)}" 
+		            				title="#{msg['mensagem.hint.editar.categoria']}">
+						<p:graphicImage value="/resources/images/write16.png" 
+										style="border:0px;"/>
+					</p:commandLink>
+
+					<p:spacer width="10" />
+		            
+		            <p:commandLink 	update=":formCadSubCategoria" 
+		            				process="@this"
+		            				action="#{categoriaController.adicionarSubCategoria(node)}" 
+		            				title="#{msg['mensagem.hint.adicionar.subcategoria']}"
+		            				oncomplete="subCategoriaPopup.show();">
+						<p:graphicImage value="/resources/images/plus16.png" 
+										style="border:0px;"/>
+					</p:commandLink>
+	
+		        </p:column>
+		
+		    </p:treeTable>
+
+    	</h:form>
+    	
+    	
+    	<p:dialog modal="true" widgetVar="subCategoriaPopup"
+    		id="popupCategoria"
+    		header="#{msg['label.cadastro.subcategoria']}"
+	        draggable="false" closable="false" width="450" height="200">
+	        
+	        <h:form id="formCadSubCategoria">
+	        
+		        <h:panelGrid id="gridCadCategoria" columns="2">
+		        	<h:outputText value="#{msg['label.categoria']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<h:outputText value="#{categoriaController.subCategoria.categoriaPai.descricao}" />
+					</h:panelGroup>
+					
+					<h:outputText value="#{msg['label.subcategoria']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+		    			<p:inputText 	id="subcategoria"
+		    							maxlength="60"
+		    							value="#{categoriaController.subCategoria.descricao}" 
+		    							size="30" />
+					</h:panelGroup>
+					
+					<h:outputText value="#{msg['label.tipo.movimentacao']}:" styleClass="campo_obrigatorio"/>
+					<h:panelGroup>
+						<p:selectOneMenu 	value="#{categoriaController.subCategoria.tipoMovimentacao}" 
+											converter="br.com.hsj.converter.GenericEnumConverter">
+							<f:selectItems value="#{categoriaController.itens}" />
+						</p:selectOneMenu>
+					</h:panelGroup>   
+	
+		        
+		        </h:panelGrid>
+		        <h:panelGroup layout="block" style="width: 100%; text-align: center">
+		   			<p:commandButton value="#{msg['botao.salvar']}" 
+		   							action="#{categoriaController.salvarSubCategoria}" 
+		   							onclick="subCategoriaPopup.hide();"
+		   							process="@form"
+		   							update=":formCat:dataTableCat, :popupCategoria">
+		   			</p:commandButton>
+		   			<p:spacer width="5" />
+			        <p:commandButton value="Fechar" 
+			        					onclick="subCategoriaPopup.hide();"
+				        				process="@this" />
+		        
+		        </h:panelGroup>
+	      	
+	      	</h:form>
+	        
+	    </p:dialog>
+    	
+    </ui:define>
+    
+</ui:composition>

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+	
+	<title><h:outputText value="#{msg.titulo}" /></title>
+	
+	<style>
+         .divCentralizada {
+            position: absolute;
+            width: 280px;
+            height: 150px;
+            left: 50%;
+            top:50%;
+            margin-left: -140px;
+            margin-top: -75px;
+            
+            padding-top: 40px;
+         }
+      </style>
+</h:head>
+<h:body>
+
+	<p:growl id="messages" autoUpdate="true" showDetail="true" life="5000" />
+	
+	<h:form>
+		<p:focus for="j_username"/>  
+	
+		<p:panel styleClass="divCentralizada">
+			<h:panelGrid columns="2">
+				<h:outputText value="#{msg['label.login']}:" styleClass="campo_obrigatorio"/>
+				<p:inputText id="j_username" value="#{loginController.login}" />
+	
+				<h:outputText value="#{msg['label.senha']}:" styleClass="campo_obrigatorio"/>
+				<p:password id="j_password" value="#{loginController.senha}" />
+				
+			</h:panelGrid>
+			
+			<br/>
+			
+			<p:commandButton value="#{msg['botao.logar']}" action="#{loginController.logar}" ajax="false" />
+			
+		</p:panel>
+	</h:form>	
+	</h:body>
+</html>

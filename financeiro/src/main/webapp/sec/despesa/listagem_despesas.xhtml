@@ -1,0 +1,45 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+    template="/template/layout.xhtml">
+    
+    <ui:define name="conteudo">
+    	
+    	<h:form id="formCat">
+	    	
+	    	<p style="margin: 0; padding: 0;"><b><h:outputText value="#{msg['label.consulta.despesas']}" /></b></p>
+	    	<p:separator />
+	    	
+	    	<p:panel id="panel">
+	    		
+	    		<h:panelGrid columns="2">
+
+					<h:outputText value="#{msg['label.descricao']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+	    				<p:inputText 	id="descricao"
+		    							maxlength="60"
+		    							value="#{despesaController.despesa.descricao}" 
+		    							size="60" />
+					</h:panelGroup> 
+
+					<h:outputText value="#{msg['label.tipo.despesa']}:" styleClass="campo_obrigatorio"/>
+	    			<h:panelGroup>
+	    				<p:selectOneMenu  value="#{despesaController.despesa.tipoDespesa}" 
+											converter="br.com.hsj.converter.GenericEnumConverter">
+							<f:selectItems value="#{despesaController.itens}" />
+						</p:selectOneMenu>
+					</h:panelGroup> 
+				</h:panelGrid>
+	    		
+	    	</p:panel>
+	    	
+	    	
+	    </h:form>
+    
+	</ui:define>
+    
+</ui:composition>
